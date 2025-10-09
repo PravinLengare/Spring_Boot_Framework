@@ -3,6 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ServletEx " vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/SpringBootDemo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/SpringBootWeb1 " vcs="Git" />
     <mapping directory="$PROJECT_DIR$/SpringJDBCEx " vcs="Git" />
   </component>

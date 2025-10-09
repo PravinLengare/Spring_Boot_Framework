@@ -19,7 +19,7 @@
   </parent>
 
   <properties>
-    <java.version>17</java.version> <!-- Java 17 required for Spring Boot 3.x -->
+    <java.version>25</java.version> <!-- Java 17 required for Spring Boot 3.x -->
   </properties>
 
   <dependencies>

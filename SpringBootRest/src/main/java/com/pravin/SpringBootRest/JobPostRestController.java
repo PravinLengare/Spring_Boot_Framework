@@ -24,7 +24,7 @@ public class JobPostRestController {
     ));
 
 
-    @Autowired
+    @Autowired          // Dependency Injection
     private JobService service;
 
     @GetMapping(path = "jobPosts",produces = {"application/json"})
@@ -55,6 +55,7 @@ public class JobPostRestController {
             service.deleteJob(postId);
             return "DELETED";
     }
+
     @GetMapping("load")
     public String loadData(){
 

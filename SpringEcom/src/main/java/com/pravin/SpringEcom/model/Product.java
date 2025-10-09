@@ -1,6 +1,5 @@
 package com.pravin.SpringEcom.model;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,10 +23,25 @@ public class Product {
     private String brand;
     private BigDecimal price;
     private String category;
-    @JsonFormat(shape = JsonFormat.Shape.STRING , pattern = "dd-MM-yyyy")
     private Date releaseDate;
     private boolean productAvailable;
     private int stockQuantity;
+    private String imageName;
+    private String imageType;
+    @Lob
+    private byte[] imageData;
+
+    public String getImageType() {
+        return imageType;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public byte[] getImageData() {
         return imageData;
@@ -36,22 +51,8 @@ public class Product {
         this.imageData = imageData;
     }
 
-    private String imageName;
-
-    public String getImageType() {
-        return imageType;
-    }
-
     public void setImageType(String imageType) {
         this.imageType = imageType;
-    }
-
-    private String imageType;
-    @Lob
-    private byte[] imageData;
-
-    public Product(int id) {
-        this.id = id;
     }
 
     public String getImageName() {
@@ -60,5 +61,9 @@ public class Product {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public Product(int id) {
+        this.id = id;
     }
 }
