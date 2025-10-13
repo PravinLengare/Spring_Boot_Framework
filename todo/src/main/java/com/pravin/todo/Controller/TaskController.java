@@ -6,10 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -30,6 +27,18 @@ public class TaskController {
     @PostMapping
     public String createTasks(@RequestParam String title){
          taskService.addTasks(title);
+        return "redirect:/";
+    }
+
+    @GetMapping("/{id}/delete")
+    public String deleteTask(@PathVariable("id") Long id){
+        taskService.deleteTask(id);
+        return "redirect:/";
+    }
+
+    @GetMapping("/{id}/toggle")
+    public String toggleTask(@PathVariable("id") Long id){
+        taskService.toggleTask(id);
         return "redirect:/";
     }
 
