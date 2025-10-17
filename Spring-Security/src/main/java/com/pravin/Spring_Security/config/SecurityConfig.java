@@ -23,24 +23,41 @@ import org.springframework.stereotype.Controller;
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
-    UserDetailsService userDetailsService;
+    private UserDetailsService userDetailsService;
 
-    public AuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 
+    @Bean
+    public AuthenticationProvider authProvider() {
+        DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
         provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
         return provider;
     }
+
+
+
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        http.csrf(customizer -> customizer.disable())
+                .authorizeHttpRequests(request -> request.anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.csrf(customizer->customizer.disable());
-        http.authorizeHttpRequests(request->request.anyRequest().authenticated());
-        http.httpBasic(Customizer.withDefaults());
-        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        return http.build();
+    }
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//
+//
+//        http.csrf(customizer->customizer.disable());
+//        http.authorizeHttpRequests(request->request.anyRequest().authenticated());
+//        http.httpBasic(Customizer.withDefaults());
+//        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+//
 
 
 
@@ -67,7 +84,7 @@ public class SecurityConfig {
 
          */
 
-        return http.build();
+        //return http.build();
     }
 
     /*
@@ -94,4 +111,4 @@ public class SecurityConfig {
 
      */
 
-}
+
