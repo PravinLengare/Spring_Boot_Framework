@@ -1,10 +1,8 @@
-package com.pravin.Spring_Security;
+package com.pravin.Spring_Security.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.http.HttpRequest;
 
 @RestController
 public class HelloController {

@@ -1,5 +1,6 @@
-package com.pravin.Spring_Security;
+package com.pravin.Spring_Security.controller;
 
+import com.pravin.Spring_Security.model.Student;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.GetMapping;
