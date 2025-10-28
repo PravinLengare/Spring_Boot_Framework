@@ -1,0 +1,44 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080" # Host:Container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/students
+      SPRING_DATASOURCE_USERNAME: pravin
+      SPRING_DATASOURCE_PASSWORD: Pravin@1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      - s-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    # WORKAROUND: Use Postgres 16 instead of latest (18)
+    image: postgres:16
+    environment:
+      POSTGRES_USER: pravin
+      POSTGRES_PASSWORD: Pravin@1234
+      POSTGRES_DB: students
+    ports:
+      - "5434:5432" # Host:Container
+    networks:
+      - s-network
+    volumes:
+      # Postgres 16 uses the /data path, so this is correct for this version
+      - postgres-s-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pravin -d students"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+    s-network:
+      driver: bridge
+
+volumes:
+    postgres-s-data:
+    
+
