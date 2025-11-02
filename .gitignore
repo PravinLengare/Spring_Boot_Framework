@@ -1,0 +1,6 @@
+.DS_Store
+.DS_Store
+OAuth2/src/main/resources/application.properties
+# Ignore properties files containing secrets
+Spring-AI/src/main/resources/application.properties
+OAuth2/src/main/resources/application.properties

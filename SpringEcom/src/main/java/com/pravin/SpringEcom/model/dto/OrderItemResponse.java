@@ -1,4 +1,9 @@
 package com.pravin.SpringEcom.model.dto;
 
-public record OrderItemResponse() {
-}
+import java.math.BigDecimal;
+
+public record OrderItemResponse(
+        String productName,
+        int quantity,
+        BigDecimal totalPrice
+) {}

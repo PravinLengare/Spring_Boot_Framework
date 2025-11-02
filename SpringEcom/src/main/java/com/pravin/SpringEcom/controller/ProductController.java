@@ -2,6 +2,7 @@ package com.pravin.SpringEcom.controller;
 
 import com.pravin.SpringEcom.model.Product;
 import com.pravin.SpringEcom.service.ProductService;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +60,7 @@ public class ProductController {
 
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable int id, @RequestPart Product product, @RequestPart MultipartFile imageFile) {
+    public ResponseEntity<String> updateProduct(@PathVariable int id, @RequestPart Product product, @RequestPart @Nullable MultipartFile imageFile) {
         Product updatedProduct = null;
         try {
             updatedProduct = productService.addOrUpdateProduct(product, imageFile);
@@ -82,7 +83,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products/search")
+    @GetMapping("/product/search")
     public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {
         List<Product> products = productService.searchProducts(keyword);
         System.out.println("searching with :" + keyword);

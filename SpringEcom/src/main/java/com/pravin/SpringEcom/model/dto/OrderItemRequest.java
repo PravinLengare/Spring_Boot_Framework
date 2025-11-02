@@ -1,4 +1,6 @@
 package com.pravin.SpringEcom.model.dto;
 
-public record OrderItemRequest() {
-}
+public record OrderItemRequest(
+        int productId,
+        int quantity
+) {}

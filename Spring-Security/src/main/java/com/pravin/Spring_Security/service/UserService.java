@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
     @Autowired
     private UserRepo repo;
+
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+
     public User addUser(User user) {
         user.setPassword(encoder.encode(user.getPassword()));
         System.out.println("The encoded password is : "+user.getPassword());

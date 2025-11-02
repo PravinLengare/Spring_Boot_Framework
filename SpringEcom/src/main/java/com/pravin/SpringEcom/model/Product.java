@@ -15,8 +15,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class Product {
 
-    @Id
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private int id;
     private String name;
     private String description;
@@ -30,38 +31,6 @@ public class Product {
     private String imageType;
     @Lob
     private byte[] imageData;
-
-    public String getImageType() {
-        return imageType;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public byte[] getImageData() {
-        return imageData;
-    }
-
-    public void setImageData(byte[] imageData) {
-        this.imageData = imageData;
-    }
-
-    public void setImageType(String imageType) {
-        this.imageType = imageType;
-    }
-
-    public String getImageName() {
-        return imageName;
-    }
-
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
 
     public Product(int id) {
         this.id = id;
