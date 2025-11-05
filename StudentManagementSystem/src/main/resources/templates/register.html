@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+</head>
+<body>
+<h2>Register</h2>
+
+<!--
+  1. th:action="@{/register}" posts to your AuthController
+  2. method="post" is required.
+  3. Thymeleaf will automatically include the CSRF token.
+-->
+<form th:action="@{/register}" method="post">
+    <div>
+        <label for="username">Username:</label>
+        <!-- name="username" must match the @RequestParam in the controller -->
+        <input type="text" id="username" name="username" required />
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <!-- name="password" must match the @RequestParam in the controller -->
+        <input type="password" id="password" name="password" required />
+    </div>
+    <div>
+        <label for="role">Role:</label>
+        <!-- name="password" must match the @RequestParam in the controller -->
+        <input type="text" id="role" name="role" required />
+    </div>
+    <button type="submit">Register</button>
+</form>
+
+<p>
+    <a th:href="@{/login}">Back to Login</a>
+</p>
+
+</body>
+</html>
