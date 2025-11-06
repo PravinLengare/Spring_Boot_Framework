@@ -30,8 +30,6 @@ public class SecurityConfig {
     public AuthenticationProvider authProvider() {
         DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        //provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
-        //  for the encryption of password
         provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
 
         return provider;
@@ -49,12 +47,17 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/students/new", true)
+                .defaultSuccessUrl("/students", true)
                 .permitAll()
                 )
 
+                // after the logout we did invalidate the session and deleted the cookies
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
                         .permitAll()
                 );
 
@@ -62,8 +65,8 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
 }

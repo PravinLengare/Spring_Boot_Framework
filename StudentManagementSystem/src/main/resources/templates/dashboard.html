@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px; /* Added padding to body */
+            background-color: #f0f2f5; /* Changed background color */
+            color: #333;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Softened shadow */
+        }
+        h1 {
+            color: #0056b3;
+            margin-top: 0; /* Removed default margin */
+        }
+
+        /*
+         ==============================================
+                ✨ ADDED/ENHANCED CSS ✨
+         ==============================================
+        */
+
+        .dashboard-widgets {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .dashboard-widgets h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /* Flex container for the stat cards */
+        .stat-list {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        /* Individual stat card */
+        .stat-list li {
+            background-color: #f9f9f9;
+            border: 1px solid #e9e9e9;
+            border-radius: 8px;
+            padding: 20px;
+            flex-basis: 30%; /* Each stat takes ~1/3 of the width */
+            min-width: 150px; /* Minimum width before wrapping */
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* Big number style */
+        .stat-number {
+            display: block;
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #0056b3;
+        }
+
+        /* Label for the number */
+        .stat-label {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        /* Container for the buttons at the bottom */
+        .button-container {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between buttons */
+        }
+
+        /* Main action button style */
+        .action-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #007bff; /* Primary blue */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Original logout button style */
+        .logout-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #d9534f;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            font-family: Arial, sans-serif;
+            font-size: 1em;
+        }
+
+        .logout-btn:hover {
+            background-color: #c9302c;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome to Your Dashboard!</h1>
+
+    <p>This is your secure dashboard page. You have successfully logged in.</p>
+
+    <div class="dashboard-widgets">
+        <h3>My Stats</h3>
+        <ul class="stat-list">
+            <li>
+                <span class="stat-number">12</span>
+                <span class="stat-label">Tasks Completed</span>
+            </li>
+            <li>
+                <span class="stat-number">5</span>
+                <span class="stat-label">Unread Messages</span>
+            </li>
+            <li>
+                <span class="stat-number">42</span>
+                <span class="stat-label">Profile Views</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="button-container">
+
+        <a th:href="@{/students}" class="action-btn">Go to Student Management</a>
+
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

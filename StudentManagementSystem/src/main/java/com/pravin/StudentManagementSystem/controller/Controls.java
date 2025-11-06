@@ -1,12 +1,10 @@
 package com.pravin.StudentManagementSystem.controller;
 
-import com.pravin.StudentManagementSystem.model.Student;
 import com.pravin.StudentManagementSystem.service.StudentService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class Controls {
     @Autowired
     private StudentService studentService;
+
+//    @Autowired
+//    private  TaskService taskService;
 
     @GetMapping("/login")
     public String showLoginPage() {
@@ -23,8 +24,18 @@ public class Controls {
     }
 
     @GetMapping("/dashboard")
-    public String showDashboard() {
-        // This is your successful login destination
+    public String showDashboard(Model model) {
+//        // This is your successful login destination
+//        int tasks = taskService.getCompletedCount();
+//
+//        // Get your other stats (for now, we'll hardcode them)
+//        int messages = 5;
+//        int views = 42;
+//
+//        // 4. Add the dynamic data to the model
+//        model.addAttribute("tasksCompleted", tasks);
+//        model.addAttribute("unreadMessages", messages);
+//        model.addAttribute("profileViews", views);
         return "dashboard";
     }
 
@@ -41,5 +52,11 @@ public class Controls {
 
         return "redirect:/login?register_success";
 
+    }
+
+    @GetMapping("/logout")
+    public String doLogout(){
+
+        return "redirect:/login";
     }
 }

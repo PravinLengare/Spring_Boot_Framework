@@ -3,24 +3,57 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Student Management System</title>
+
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+
+    <style>
+        /* Custom style for the logout button in the navbar */
+        .nav-logout-btn {
+            display: inline-block;
+            padding: 0.4rem 0.75rem; /* Sizing for the navbar */
+            font-size: 0.9rem;       /* Sizing for the navbar */
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+
+            background-color: #d9534f; /* Red color from your dashboard */
+            color: white;             /* White text */
+            border: 1px solid transparent;
+            border-radius: 0.25rem;   /* Standard border-radius */
+            transition: background-color 0.15s ease-in-out;
+        }
+
+        .nav-logout-btn:hover {
+            background-color: #c9302c; /* A darker red on hover */
+            color: white;
+        }
+
+        /* Helper class to make the form sit nicely in the navbar */
+        .nav-logout-form {
+            margin-bottom: 0; /* Remove default form margin */
+        }
+    </style>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
     <a class="navbar-brand" href="#">Student Management System</a>
 
-    <!-- Toggler/collapsibe Button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/students}">Student Management</a>
             </li>
@@ -28,6 +61,15 @@
                 <a class="nav-link" th:href="@{/teachers}">Teacher Management</a>
             </li>
         </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <form th:action="@{/logout}" method="post" class="nav-logout-form">
+                    <button type="submit" class="nav-logout-btn">Logout</button>
+                </form>
+            </li>
+        </ul>
+
     </div>
 </nav>
 

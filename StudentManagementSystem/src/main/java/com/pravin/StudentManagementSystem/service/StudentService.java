@@ -45,11 +45,10 @@ public class StudentService {
             throw new RuntimeException("Username already exists");
 
         }
-
         Student newStudent = new Student();
         newStudent.setUsername(username);
         newStudent.setPassword(passwordEncoder.encode(password));
-        newStudent.setRole("ROLE_USER");
+        newStudent.setRole("user_role");
         studentRepo.save(newStudent);
 
     }

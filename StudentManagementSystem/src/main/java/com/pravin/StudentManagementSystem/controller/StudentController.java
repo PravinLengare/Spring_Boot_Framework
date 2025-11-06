@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/")
 public class StudentController {
+
     @Autowired
     private StudentService studentService;
 
@@ -29,6 +31,7 @@ public class StudentController {
         return "create_student";
 
     }
+
     @PostMapping("/students")
     public String saveStudent(@ModelAttribute("student") Student student) {
         studentService.saveStudent(student);
@@ -69,12 +72,6 @@ public class StudentController {
         studentService.delete(id);
         return "redirect:/students";
     }
-
-
-
-
-
-
 
 
 }

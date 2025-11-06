@@ -2,39 +2,104 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    <title>Student Management System</title>
+    <title>Create New Student - SMS</title>
+
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+
+    <style>
+        /* Light grey background for the whole page */
+        body {
+            background-color: #f0f2f5;
+        }
+
+        /* Add shadow and better padding to the form card */
+        .card {
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px; /* Rounded corners */
+        }
+
+        /* Center the form content */
+        .card-body {
+            padding: 2.5rem; /* More padding */
+        }
+
+        /* Style for the H1 title */
+        .form-title {
+             color: #1a73e8; /* Blue color */
+             margin-bottom: 1.5rem;
+        }
+
+        /* Custom style for the logout button in the navbar */
+        .nav-logout-btn {
+            display: inline-block;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.9rem;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+
+            background-color: #d9534f; /* Red color */
+            color: white;
+            border: 1px solid transparent;
+            border-radius: 0.25rem;
+            transition: background-color 0.15s ease-in-out;
+        }
+
+        .nav-logout-btn:hover {
+            background-color: #c9302c;
+            color: white;
+        }
+
+        .nav-logout-form {
+            margin-bottom: 0;
+        }
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <!-- Brand -->
     <a class="navbar-brand" href="#">Student Management System</a>
 
-    <!-- Toggler/collapsibe Button -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Navbar links -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/students}">Student Management</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/teachers}">Teacher Management</a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <form th:action="@{/logout}" method="post" class="nav-logout-form">
+                    <button type="submit" class="nav-logout-btn">Logout</button>
+                </form>
             </li>
         </ul>
     </div>
 </nav>
 <br>
 <br>
+
 <div class = "container">
     <div class = "row">
-        <div class ="col-lg-6 col-md-6 col-sm-6 container justify-content-center card">
-            <h1 class = "text-center"> Create New Student </h1>
+        <div class ="col-md-8 offset-md-2 card">
+
+            <h1 class = "text-center form-title"> Create New Student </h1>
+
             <div class = "card-body">
                 <form th:action="@{/students}" th:object = "${student}" method="POST">
+
                     <div class ="form-group">
                         <label> Student First Name </label>
                         <input
@@ -68,10 +133,9 @@
                         />
                     </div>
 
-                    <div class = "box-footer">
-                        <button type="submit" class = "btn btn-primary">
-                            Submit
-                        </button>
+                    <div class = "box-footer text-center"> <button type="submit" class = "btn btn-primary btn-lg">
+                        Submit
+                    </button>
                     </div>
                 </form>
 
