@@ -15,6 +15,8 @@ public class StudentService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
+
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Autowired
@@ -28,16 +30,16 @@ public class StudentService {
         studentRepo.save(student);
     }
 
-    public Optional<Student> getStudentById(Long id) {
-        return studentRepo.findById(id);
+    public Optional<Student> getStudentById(Long user_id) {
+        return studentRepo.findById(user_id);
     }
 
     public void updateStudent(Student student) {
         studentRepo.save(student);
     }
 
-    public void delete(Long id) {
-        studentRepo.deleteById(id);
+    public void delete(Long user_id) {
+        studentRepo.deleteById(user_id);
     }
 
     public void addStudent(String username, String password) {
@@ -48,8 +50,8 @@ public class StudentService {
         Student newStudent = new Student();
         newStudent.setUsername(username);
         newStudent.setPassword(passwordEncoder.encode(password));
-        newStudent.setRole("user_role");
         studentRepo.save(newStudent);
 
     }
+
 }

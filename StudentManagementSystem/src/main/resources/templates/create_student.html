@@ -6,64 +6,150 @@
 
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          xintegrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
 
+    <!-- Added Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        /* Light grey background for the whole page */
+        :root {
+            --primary-blue: #007bff;
+            --primary-blue-dark: #0056b3;
+            --danger-red: #d9534f;
+            --danger-red-dark: #c9302c;
+            --bg-light: #f4f7f6;
+            --text-dark: #333;
+            --text-light: #555;
+            --border-color: #e0e0e0;
+        }
+
+        /* 1. Global & Typography */
         body {
-            background-color: #f0f2f5;
+            background-color: var(--bg-light); /* Light background */
+            font-family: 'Poppins', sans-serif; /* Modern font */
+            color: var(--text-dark);
         }
 
-        /* Add shadow and better padding to the form card */
-        .card {
-            border: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 8px; /* Rounded corners */
+        h1 {
+            font-weight: 600;
         }
 
-        /* Center the form content */
-        .card-body {
-            padding: 2.5rem; /* More padding */
+        label {
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 0.75rem; /* More space for label */
         }
 
-        /* Style for the H1 title */
-        .form-title {
-             color: #1a73e8; /* Blue color */
-             margin-bottom: 1.5rem;
+        /* 2. Navbar */
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.25rem;
         }
 
-        /* Custom style for the logout button in the navbar */
+        .navbar-nav .nav-link {
+            font-weight: 500;
+        }
+
+        /* 3. Logout Button */
         .nav-logout-btn {
             display: inline-block;
             padding: 0.4rem 0.75rem;
             font-size: 0.9rem;
-            font-weight: 400;
+            font-weight: 500; /* Bolder font */
             line-height: 1.5;
             text-align: center;
             vertical-align: middle;
             cursor: pointer;
-
-            background-color: #d9534f; /* Red color */
+            background-color: var(--danger-red);
             color: white;
             border: 1px solid transparent;
-            border-radius: 0.25rem;
-            transition: background-color 0.15s ease-in-out;
+            border-radius: 0.3rem; /* Slightly more rounded */
+            transition: all 0.2s ease-in-out;
         }
 
         .nav-logout-btn:hover {
-            background-color: #c9302c;
+            background-color: var(--danger-red-dark);
             color: white;
+            transform: translateY(-1px); /* Add slight lift */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .nav-logout-form {
             margin-bottom: 0;
         }
+
+        /* 4. Main Form Card */
+        .card {
+            border: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Softer, deeper shadow */
+            border-radius: 12px; /* More rounded corners */
+            margin-top: 2rem; /* Add space from navbar */
+        }
+
+        .card-body {
+            padding: 3rem; /* More padding */
+        }
+
+        /* 5. Form Title */
+        .form-title {
+             color: var(--text-dark); /* Changed to dark text */
+             font-weight: 700;
+             margin-bottom: 2rem;
+             border-bottom: 2px solid var(--primary-blue); /* Accent underline */
+             padding-bottom: 0.75rem;
+             display: inline-block; /* Make underline fit content */
+        }
+
+        .form-header {
+             text-align: center;
+             margin-bottom: 1.5rem;
+        }
+
+        /* 6. Form Inputs */
+        .form-control {
+            border-radius: 8px; /* Rounded inputs */
+            padding: 1.5rem 1rem; /* Taller inputs */
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+        }
+
+        .form-group {
+            margin-bottom: 1.75rem; /* More space between fields */
+        }
+
+        /* 7. Submit Button */
+        .btn-primary {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            font-size: 1.1rem;
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,123,255,0.2);
+            width: 100%; /* Make button full width */
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-blue-dark);
+            border-color: var(--primary-blue-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.3);
+        }
+
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-    <a class="navbar-brand" href="#">Student Management System</a>
+    <a class="navbar-brand" th:href="@{/students}">Student Management System</a>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -88,16 +174,16 @@
         </ul>
     </div>
 </nav>
-<br>
-<br>
 
 <div class = "container">
     <div class = "row">
         <div class ="col-md-8 offset-md-2 card">
 
-            <h1 class = "text-center form-title"> Create New Student </h1>
+            <div class="form-header">
+                <h1 class = "form-title"> Create New Student </h1>
+            </div>
 
-            <div class = "card-body">
+            <div class = "card-body" style="padding-top: 1rem;"> <!-- Reduced top padding since header has margin -->
                 <form th:action="@{/students}" th:object = "${student}" method="POST">
 
                     <div class ="form-group">
@@ -108,6 +194,7 @@
                                 th:field = "*{firstName}"
                                 class = "form-control"
                                 placeholder="Enter Student First Name"
+                                required
                         />
                     </div>
 
@@ -119,6 +206,7 @@
                                 th:field = "*{lastName}"
                                 class = "form-control"
                                 placeholder="Enter Student Last Name"
+                                required
                         />
                     </div>
 
@@ -130,12 +218,14 @@
                                 th:field = "*{email}"
                                 class = "form-control"
                                 placeholder="Enter Student Email"
+                                required
                         />
                     </div>
 
-                    <div class = "box-footer text-center"> <button type="submit" class = "btn btn-primary btn-lg">
-                        Submit
-                    </button>
+                    <div class = "box-footer text-center" style="margin-top: 2rem;">
+                        <button type="submit" class = "btn btn-primary btn-lg">
+                            Submit
+                        </button>
                     </div>
                 </form>
 

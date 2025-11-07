@@ -38,13 +38,13 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    @GetMapping("/students/edit/{id}")
-    public String editStudentsForm(@PathVariable Long id, Model model) {
+    @GetMapping("/students/edit/{user_id}")
+    public String editStudentsForm(@PathVariable Long user_id, Model model) {
 
     // 1. Get the Student from the service and handle the case if it's not found
 
-        Student student = studentService.getStudentById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
+        Student student = studentService.getStudentById(user_id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + user_id));
 
         // 2. Add the actual Student object (not the Optional) to the model
         model.addAttribute("student", student);
@@ -53,9 +53,9 @@ public class StudentController {
     }
 
     @PostMapping("/students/edit/{id}")
-    public String updateStudent(@PathVariable Long id, @ModelAttribute("student") Student student,Model model){
+    public String updateStudent(@PathVariable Long user_id, @ModelAttribute("student") Student student,Model model){
 
-        Optional<Student> existingStudent = studentService.getStudentById(id);
+        Optional<Student> existingStudent = studentService.getStudentById(user_id);
 
         existingStudent.get().setFirstName(student.getFirstName());
         existingStudent.get().setLastName(student.getLastName());
@@ -67,9 +67,9 @@ public class StudentController {
 
     }
 
-    @GetMapping("/students/delete/{id}")
-    public String deleteStudent(@PathVariable Long id){
-        studentService.delete(id);
+    @GetMapping("/students/delete/{user_id}")
+    public String deleteStudent(@PathVariable Long user_id){
+        studentService.delete(user_id);
         return "redirect:/students";
     }
 

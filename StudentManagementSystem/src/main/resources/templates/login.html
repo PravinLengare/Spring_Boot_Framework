@@ -108,6 +108,57 @@
             margin-bottom: 20px;
             text-align: center;
         }
+
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #888;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #ddd;
+        }
+        .divider::before { left: 0; }
+        .divider::after { right: 0; }
+
+        .oauth-login-link {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            box-sizing: border-box; /* Ensures padding doesn't affect width */
+            transition: opacity 0.2s;
+            margin-bottom: 0.75rem; /* Added margin between buttons */
+        }
+
+        .oauth-login-link:hover { opacity: 0.9; }
+
+        /* --- Google Button Style --- */
+        .google-btn {
+            background-color: #db4437;
+            color: white;
+            border: 1px solid #c33a2c;
+        }
+
+        /* --- NEW GITHUB BUTTON STYLE --- */
+        .github-btn {
+            background-color: #333;
+            color: white;
+            border: 1px solid #222;
+        }
+
     </style>
 </head>
 
@@ -145,6 +196,16 @@
             <a th:href="@{/register}">Register here</a>
         </p>
     </form>
+
+    <div class="divider">OR</div>
+
+    <a th:href="@{/oauth2/authorization/google}" class="oauth-login-link google-btn">
+        Login with Google
+    </a>
+
+<!--    <a th:href="@{/oauth2/authorization/github}" class="oauth-login-link github-btn">-->
+<!--        Login with GitHub-->
+<!--    </a>-->
 
 </div> </body>
 </html>
