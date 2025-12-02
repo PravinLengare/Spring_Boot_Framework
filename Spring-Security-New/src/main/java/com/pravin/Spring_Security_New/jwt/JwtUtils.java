@@ -1,0 +1,91 @@
+package com.pravin.Spring_Security_New.jwt;
+
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+import java.security.Key;
+import java.util.Date;
+
+@Component
+public class JwtUtils {
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+
+    @Value("spring.app.jwtExpirationMS")
+    private int jwtExpirationMS;
+
+    @Value("spring.app.jwtSecret")
+    private String jwtSecret;
+
+    // Getting Jwt from Header
+    public String getTokenFromHeader(HttpServletRequest request){
+        String bearerToken = request.getHeader("Authorization");
+        logger.debug("Authorization Header : {}",bearerToken);
+        if (bearerToken!= null && bearerToken.startsWith("Bearer ")){
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
+    // Generating Token from Username
+    public String generateTokenFromUsername(UserDetails userDetails){
+        String username = userDetails.getUsername();
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date( (new Date().getTime() + jwtExpirationMS) ))
+                .signWith(key())
+                .compact();
+    }
+
+    // Getting username from Token
+    public String getUsernameFromToken(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(key())           // 1. Set key (Old syntax)
+                .build()
+                .parseClaimsJws(token)          // 2. Parse JWS
+                .getBody()                      // 3. Get Body
+                .getSubject();                  // 4. Get Subject
+    }
+
+    //Generate Signing Key
+    public Key key(){
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret)
+        );
+    }
+
+    // Validate Jwt Token
+    public boolean validateJwtToken(String authToken){
+        try{
+            System.out.println("Validate");
+            Jwts.parserBuilder()
+                    .setSigningKey(key())           // 1. Set the secret key
+                    .build()
+                    .parseClaimsJws(authToken);
+
+            return true;
+        }
+        catch (MalformedJwtException e) {
+            logger.error("Invalid JWT token: " + e.getMessage());
+        } catch (ExpiredJwtException e) {
+            logger.error("JWT token is expired: " + e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            logger.error("JWT token is unsupported: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            logger.error("JWT claims string is empty: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+
+}
