@@ -20,11 +20,11 @@ import java.util.Date;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("spring.app.jwtExpirationMS")
-    private int jwtExpirationMS;
-
-    @Value("spring.app.jwtSecret")
+    @Value("${spring.app.jwtSecret}")
     private String jwtSecret;
+
+    @Value("${spring.app.jwtExpirationMs}")
+    private int jwtExpirationMs;
 
     // Getting Jwt from Header
     public String getTokenFromHeader(HttpServletRequest request){
@@ -42,7 +42,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date( (new Date().getTime() + jwtExpirationMS) ))
+                .setExpiration(new Date( (new Date().getTime() + jwtExpirationMs) ))
                 .signWith(key())
                 .compact();
     }
