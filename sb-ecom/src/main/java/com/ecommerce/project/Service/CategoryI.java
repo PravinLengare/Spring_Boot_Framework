@@ -7,6 +7,5 @@ public interface CategoryI {
     List<Category> getAllCategories();
     void createCategory(Category category);
     String deleteCategoryById(Long categoryId);
-
     Category changeCategory(Category category,Long categoryId);
 }

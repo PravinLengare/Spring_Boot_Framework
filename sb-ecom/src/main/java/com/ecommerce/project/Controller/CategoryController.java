@@ -4,7 +4,6 @@ import com.ecommerce.project.Service.CategoryService;
 import com.ecommerce.project.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -50,7 +49,7 @@ public class CategoryController {
         try {
             Category savedCategory = categoryService.changeCategory(category,categoryId);
 
-            return new ResponseEntity<>("Updated Category with categoryId "+category, HttpStatus.OK);
+            return new ResponseEntity<>("Updated Category with categoryId "+ categoryId, HttpStatus.OK);
         } catch (ResponseStatusException e) {
             return new ResponseEntity<>(e.getReason(), e.getStatusCode());
         }
