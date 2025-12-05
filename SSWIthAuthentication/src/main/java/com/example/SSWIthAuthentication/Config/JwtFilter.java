@@ -1,8 +1,9 @@
-package com.pravin.spring_jwt.config;
+package com.example.SSWIthAuthentication.Config;
 
-import com.pravin.spring_jwt.service.JwtService;
-import com.pravin.spring_jwt.service.MyUserDetailsService;
-import jakarta.servlet.FilterChain;
+
+ import com.example.SSWIthAuthentication.Service.JwtService;
+ import com.example.SSWIthAuthentication.Service.MyUserDetailsService;
+ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,8 +49,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-            filterChain.doFilter(request, response);
+
         }
+
+        filterChain.doFilter(request, response);
 
     }
 }
