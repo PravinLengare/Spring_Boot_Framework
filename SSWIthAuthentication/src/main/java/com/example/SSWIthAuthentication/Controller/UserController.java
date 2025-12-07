@@ -42,7 +42,7 @@ public class UserController {
         return new ResponseEntity<>(service.addUser(user), HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/api/auth/signin")
     public ResponseEntity<?> login(@RequestBody User user) {
         try {
             // 1. Attempt Authentication

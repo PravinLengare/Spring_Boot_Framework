@@ -20,4 +20,23 @@ public class UserService {
         System.out.println("The encoded password is : "+user.getPassword());
         return repo.save(user);
     }
+
+    public void saveGoogleUser(String email, String name) {
+        User existingUser = repo.findByUsername(email);
+
+        if (existingUser == null){
+            User user = new User();
+            user.setUsername(email);
+            user.setPassword(passwordEncoder.encode("OAUTH_dummy_password"));
+            repo.save(user);
+        }
+        else {
+            System.out.println("welcome back , "+name);
+        }
+
+    }
+
+    public User findByEmail_(String email) {
+        return repo.findByEmail(email);
+    }
 }

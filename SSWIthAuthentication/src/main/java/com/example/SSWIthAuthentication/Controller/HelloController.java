@@ -7,13 +7,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HelloController {
 
-    @GetMapping("hello")
-    public String greet(HttpServletRequest request){
-        return "Hello World "+request.getSession().getId();
+    @GetMapping("/")
+    public String greet(){
+        return "redirect:/login";
     }
 
-    @GetMapping("about")
+//    @GetMapping("/about")
+//    public String about(HttpServletRequest request){
+//        return "Pravin Lengare "+request.getSession().getId();
+//    }
+
+    @GetMapping("/about")
     public String about(HttpServletRequest request){
-        return "Pravin Lengare "+request.getSession().getId();
+        return "Pravin Lengare ";
     }
 }
