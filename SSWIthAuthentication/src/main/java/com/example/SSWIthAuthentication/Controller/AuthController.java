@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,8 @@ import java.util.Optional;
 
 @RestController
 public class AuthController {
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRepo userRepository;
@@ -34,14 +37,14 @@ public class AuthController {
             user = existingUser.get();
             user.setUsername(token.getEmail());
             user.setEmail(token.getEmail());
-            user.setPassword(token.getEmail());
+            user.setPassword(passwordEncoder.encode(token.getEmail()));
             userRepository.save(user); // Save updates
         } else {
             // CREATE: New user
             user = new User();
             user.setEmail(email);
             user.setUsername(token.getEmail());
-            user.setPassword(token.getEmail());
+            user.setPassword(passwordEncoder.encode(token.getEmail()));
             userRepository.save(user); // Insert
         }
 

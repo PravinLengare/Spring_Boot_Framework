@@ -65,7 +65,7 @@ public class SecurityConfig {
                         // 1. MATCH YOUR CONTROLLER URL EXACTLY
                         .requestMatchers("/auth/google/callback").permitAll()
                         // 2. Allow other public endpoints
-                        .requestMatchers("/register", "/").permitAll()
+                        .requestMatchers("/register", "/","/index.html","/api/auth/login").permitAll()
                         .requestMatchers("/static/**", "/css/**", "/js/**", "/images/**").permitAll()
                         // 3. SECURE EVERYTHING ELSE
                         .anyRequest().authenticated()

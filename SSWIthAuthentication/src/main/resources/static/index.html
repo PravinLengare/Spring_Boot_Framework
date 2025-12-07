@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Application</title>
+    <style>
+        /* --- CSS STYLES --- */
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Main Card Container */
+        .container {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        h2 { margin: 0 0 10px; color: #202124; font-size: 24px; }
+        p { color: #5f6368; margin: 0 0 30px; font-size: 16px; }
+
+        /* Google Sign-In Button */
+        .google-btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .google-btn:hover { background-color: #1557b0; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+        .google-btn:active { background-color: #174ea6; }
+
+        /* Dashboard & User Info */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            border: 2px solid #e8eaed;
+            object-fit: cover;
+        }
+
+        .user-info-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 20px;
+            border: 1px solid #dadce0;
+        }
+
+        .user-info-card p { margin: 8px 0; font-size: 14px; color: #3c4043; }
+        .user-info-card strong { color: #202124; }
+
+        /* Logout Button */
+        .logout-btn {
+            background-color: white;
+            color: #d93025;
+            border: 1px solid #d93025;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover { background-color: #fce8e6; }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+
+        .status-msg {
+            margin-top: 15px;
+            font-size: 13px;
+            color: #1a73e8;
+            min-height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="login-screen">
+        <h2>Welcome Back</h2>
+        <p>Sign in to access your dashboard</p>
+
+        <button class="google-btn" onclick="signInWithGoogle()">
+            <span>Sign in with Google</span>
+        </button>
+    </div>
+
+    <div id="dashboard-screen" class="hidden">
+        <div class="profile-section">
+            <img id="profile-pic" class="profile-pic" src="" alt="Profile">
+            <h2>Hi, <span id="user-first-name">User</span>!</h2>
+        </div>
+
+        <div class="user-info-card">
+            <p><strong>Name:</strong> <span id="user-name"></span></p>
+            <p><strong>Email:</strong> <span id="user-email"></span></p>
+            <p><strong>Database Status:</strong> <span style="color: #188038; font-weight: bold;">Verified & Saved</span></p>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">Sign out</button>
+    </div>
+
+    <div id="status" class="status-msg"></div>
+</div>
+
+<script type="module">
+    // 1. Import Firebase Functions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    // ==========================================
+    // TODO: PASTE YOUR FIREBASE CONFIG HERE
+    // ==========================================
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDCK8NZcc-66WGB83PHlO2ryFPmPUzG1b8",
+      authDomain: "hoolistem.firebaseapp.com",
+      projectId: "hoolistem",
+      storageBucket: "hoolistem.firebasestorage.app",
+      messagingSenderId: "610097991402",
+      appId: "1:610097991402:web:0ac68ab57d013b33a91193",
+      measurementId: "G-PC4CGN6JDK"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // --- LOGIN FUNCTION ---
+    window.signInWithGoogle = function() {
+        document.getElementById("status").innerText = "Contacting Google...";
+
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                document.getElementById("status").innerText = "Google Login Success! Getting Token...";
+
+                // 3. Get the JWT Token from Firebase
+                user.getIdToken().then((token) => {
+                    console.log("Firebase Token:", token);
+                    // 4. Send it to your Spring Boot Backend
+                    sendTokenToBackend(token);
+                });
+            })
+            .catch((error) => {
+                console.error(error);
+                document.getElementById("status").innerText = "Error: " + error.message;
+            });
+    }
+
+    // --- BACKEND SYNC FUNCTION ---
+    function sendTokenToBackend(token) {
+        document.getElementById("status").innerText = "Syncing with Backend...";
+
+        // Ensure this matches your Spring Boot Controller URL
+        fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + token, // Standard Bearer token header
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) return response.json();
+            throw new Error("Backend rejected token (403/401)");
+        })
+        .then(dbUser => {
+            // Success! Show the dashboard
+            console.log("Backend Response:", dbUser);
+            showDashboard(dbUser);
+        })
+        .catch(error => {
+            console.error(error);
+            document.getElementById("status").innerText = "Backend Error: " + error.message;
+        });
+    }
+
+    // --- UI HELPERS ---
+    function showDashboard(user) {
+        document.getElementById("login-screen").classList.add("hidden");
+        document.getElementById("dashboard-screen").classList.remove("hidden");
+        document.getElementById("status").innerText = "";
+
+        // Handle Names
+        let fullName = user.name || user.username || "User";
+        document.getElementById("user-name").innerText = fullName;
+        // Split name to get just the first part for the "Hi, Pravin!" message
+        document.getElementById("user-first-name").innerText = fullName.split(' ')[0];
+
+        document.getElementById("user-email").innerText = user.email;
+
+        // Handle Picture
+        if(user.pictureUrl) {
+            document.getElementById("profile-pic").src = user.pictureUrl;
+        } else {
+            // Fallback image if no picture
+            document.getElementById("profile-pic").src = "https://ui-avatars.com/api/?name=" + fullName;
+        }
+    }
+
+    window.logout = function() {
+        signOut(auth).then(() => {
+            location.reload(); // Refresh page to clear state
+        });
+    }
+</script>
+
+</body>
+</html>
