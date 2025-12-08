@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM Project - Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px; /* Wider container for the dashboard */
+            width: 100%;
+            min-height: 500px;
+        }
+
+        h1, h2 { text-align: center; color: #333; margin-bottom: 20px; }
+
+        /* --- LOGIN & ROLE STYLES --- */
+        .login-section, .role-section { text-align: center; margin-top: 50px; }
+        .hidden { display: none; }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 10px;
+        }
+        .btn:hover { transform: translateY(-2px); }
+
+        .google-btn { background: #fff; color: #444; border: 1px solid #ddd; display: inline-flex; align-items: center; gap: 10px; }
+        .student-btn { background: #4CAF50; color: white; }
+        .teacher-btn { background: #2196F3; color: white; }
+        .logout-btn { background: #f44336; color: white; float: right; padding: 8px 15px; font-size: 14px;}
+
+        /* --- DASHBOARD STYLES --- */
+        .dashboard { display: none; }
+
+        /* Main Tabs (Student View / Teacher View) - Hidden via JS usually */
+        .main-tabs { display: none; }
+
+        /* --- TEACHER SUB-TABS NAVIGATION --- */
+        .sub-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .nav-item {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover { background: #f0f2f5; color: #333; }
+
+        .nav-item.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+        }
+
+        /* --- CONTENT AREAS --- */
+        .tab-pane { display: none; animation: fadeIn 0.4s; }
+        .tab-pane.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- DATA CARDS --- */
+        .data-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .data-card h3 { margin-top: 0; color: #667eea; font-size: 18px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f9f9f9; }
+        .row:last-child { border-bottom: none; }
+        .label { font-weight: 600; color: #555; }
+        .value { color: #333; }
+
+        /* Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+        .stat-box { background: #f8f9fa; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #eee; }
+        .stat-num { font-size: 24px; font-weight: bold; color: #667eea; display: block; margin-top: 5px; }
+
+        .error-msg { color: red; background: #ffebee; padding: 10px; border-radius: 5px; margin: 10px 0; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="error-box" class="error-msg"></div>
+
+    <div id="loginSection" class="login-section">
+        <h1>Welcome to STEM Portal</h1>
+        <p>Please sign in to continue</p>
+        <br>
+        <button class="btn google-btn" onclick="signInWithGoogle()">
+            <span>Sign in with Google</span>
+        </button>
+    </div>
+
+    <div id="roleSection" class="role-section hidden">
+        <h2>Select Your Role</h2>
+        <button class="btn student-btn" onclick="registerRole('STUDENT')">👨‍🎓 I am a Student</button>
+        <button class="btn teacher-btn" onclick="registerRole('TEACHER')">👨‍🏫 I am a Teacher</button>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+        <div style="overflow: hidden; margin-bottom: 20px;">
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            <h2 id="welcome-msg" style="text-align: left; margin: 0;">Dashboard</h2>
+        </div>
+
+        <div id="teacherView" class="hidden">
+            <div class="sub-nav">
+                <button class="nav-item active" onclick="openTeacherTab('t-profile')">👤 Profile</button>
+                <button class="nav-item" onclick="openTeacherTab('t-stats')">📊 Statistics</button>
+                <button class="nav-item" onclick="openTeacherTab('t-classes')">📚 Classes</button>
+                <button class="nav-item" onclick="openTeacherTab('t-assignments')">⏳ Assignments</button>
+                <button class="nav-item" onclick="openTeacherTab('t-students')">👥 Students</button>
+            </div>
+
+            <div id="t-profile" class="tab-pane active"><p>Loading Profile...</p></div>
+            <div id="t-stats" class="tab-pane"><p>Loading Stats...</p></div>
+            <div id="t-classes" class="tab-pane"><p>Loading Classes...</p></div>
+            <div id="t-assignments" class="tab-pane"><p>Loading Assignments...</p></div>
+            <div id="t-students" class="tab-pane"><p>Loading Students...</p></div>
+        </div>
+
+        <div id="studentView" class="hidden">
+            <div id="student-content">Loading...</div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+    // --- CONFIGURATION ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDCK8NZcc-66WGB83PHlO2ryFPmPUzG1b8",
+        authDomain: "hoolistem.firebaseapp.com",
+        projectId: "hoolistem",
+        storageBucket: "hoolistem.firebasestorage.app",
+        messagingSenderId: "610097991402",
+        appId: "1:610097991402:web:0ac68ab57d013b33a91193",
+        measurementId: "G-PC4CGN6JDK"
+    };
+
+    const API_BASE_URL = 'http://localhost:8080/api';
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    let firebaseToken = null;
+    let userRole = null;
+
+    // --- AUTH FUNCTIONS ---
+    window.signInWithGoogle = async function() {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            firebaseToken = await result.user.getIdToken();
+            localStorage.setItem('firebaseToken', firebaseToken);
+            checkUser();
+        } catch (error) {
+            showError(error.message);
+        }
+    };
+
+    async function checkUser() {
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/check-user`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${firebaseToken}`, 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+
+            if (data.status === 'EXISTS') {
+                userRole = data.role;
+                localStorage.setItem('userRole', userRole);
+                initDashboard();
+            } else {
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('roleSection').classList.remove('hidden');
+            }
+        } catch (err) { showError("Failed to connect to backend"); }
+    }
+
+    window.registerRole = async function(role) {
+        if(!firebaseToken) firebaseToken = localStorage.getItem('firebaseToken');
+
+        const res = await fetch(`${API_BASE_URL}/auth/register-role`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${firebaseToken}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ role: role })
+        });
+
+        if (res.ok) {
+            userRole = role;
+            localStorage.setItem('userRole', role);
+            initDashboard();
+        } else {
+            showError("Registration failed.");
+        }
+    };
+
+    // --- DASHBOARD LOGIC ---
+    function initDashboard() {
+        document.getElementById('loginSection').classList.add('hidden');
+        document.getElementById('roleSection').classList.add('hidden');
+        document.getElementById('dashboard').style.display = 'block';
+
+        if (userRole === 'TEACHER') {
+            document.getElementById('teacherView').classList.remove('hidden');
+            document.getElementById('welcome-msg').innerText = "Teacher Dashboard";
+            loadTeacherData();
+        } else {
+            document.getElementById('studentView').classList.remove('hidden');
+            document.getElementById('welcome-msg').innerText = "Student Dashboard";
+            loadStudentData();
+        }
+    }
+
+    // --- TEACHER DATA LOADING ---
+    async function loadTeacherData() {
+        const headers = { 'Authorization': `Bearer ${firebaseToken}` };
+
+        try {
+            const [profile, classes, students, assignments, stats] = await Promise.all([
+                fetch(`${API_BASE_URL}/teacher/profile`, { headers }).then(r => r.json()),
+                fetch(`${API_BASE_URL}/teacher/classes`, { headers }).then(r => r.json()),
+                fetch(`${API_BASE_URL}/teacher/students`, { headers }).then(r => r.json()),
+                fetch(`${API_BASE_URL}/teacher/pending-assignments`, { headers }).then(r => r.json()),
+                fetch(`${API_BASE_URL}/teacher/statistics`, { headers }).then(r => r.json())
+            ]);
+
+            // 1. Render Profile
+            document.getElementById('t-profile').innerHTML = `
+                <div class="data-card">
+                    <h3>Teacher Details</h3>
+                    <div class="row"><span class="label">Name:</span> <span class="value">${profile.name}</span></div>
+                    <div class="row"><span class="label">Email:</span> <span class="value">${profile.email}</span></div>
+                    <div class="row"><span class="label">ID:</span> <span class="value">${profile.teacherId}</span></div>
+                    <div class="row"><span class="label">Dept:</span> <span class="value">${profile.department}</span></div>
+                    <div class="row"><span class="label">Role:</span> <span class="value">${profile.designation}</span></div>
+                </div>`;
+
+            // 2. Render Stats
+            document.getElementById('t-stats').innerHTML = `
+                <div class="stats-grid">
+                    <div class="stat-box">Total Classes<span class="stat-num">${stats.totalClasses}</span></div>
+                    <div class="stat-box">Students<span class="stat-num">${stats.totalStudents}</span></div>
+                    <div class="stat-box">Avg Attendance<span class="stat-num">${stats.averageAttendance}%</span></div>
+                    <div class="stat-box">Pending<span class="stat-num" style="color:red">${stats.pendingGradingTasks}</span></div>
+                </div>`;
+
+            // 3. Render Classes
+            document.getElementById('t-classes').innerHTML = classes.map(c => `
+                <div class="data-card">
+                    <h3>${c.className} (${c.code})</h3>
+                    <div class="row"><span class="label">Semester:</span> <span class="value">${c.semester}</span></div>
+                    <div class="row"><span class="label">Students:</span> <span class="value">${c.students}</span></div>
+                    <div class="row"><span class="label">Time:</span> <span class="value">${c.schedule}</span></div>
+                </div>`).join('');
+
+            // 4. Render Assignments
+            document.getElementById('t-assignments').innerHTML = assignments.map(a => `
+                <div class="data-card">
+                    <h3>${a.assignmentTitle}</h3>
+                    <div class="row"><span class="label">Class:</span> <span class="value">${a.class}</span></div>
+                    <div class="row"><span class="label">Due:</span> <span class="value">${a.dueDate}</span></div>
+                    <div class="row"><span class="label">Submitted:</span> <span class="value">${a.submittedBy}/${a.totalStudents}</span></div>
+                    <div class="row"><span class="label">To Grade:</span> <span class="value" style="color:red; font-weight:bold">${a.pendingGrading}</span></div>
+                </div>`).join('');
+
+            // 5. Render Students
+            document.getElementById('t-students').innerHTML = students.map(s => `
+                <div class="data-card">
+                    <h3>${s.name}</h3>
+                    <div class="row"><span class="label">ID:</span> <span class="value">${s.studentId}</span></div>
+                    <div class="row"><span class="label">Class:</span> <span class="value">${s.class}</span></div>
+                    <div class="row"><span class="label">Grade:</span> <span class="value"><strong>${s.grade}</strong></span></div>
+                    <div class="row"><span class="label">Attendance:</span> <span class="value">${s.attendance}%</span></div>
+                </div>`).join('');
+
+        } catch (e) {
+            showError("Error loading teacher data. Ensure you have the right permissions.");
+        }
+    }
+
+    // --- STUDENT DATA LOADING (Simple for now) ---
+    async function loadStudentData() {
+        const headers = { 'Authorization': `Bearer ${firebaseToken}` };
+        try {
+            const profile = await fetch(`${API_BASE_URL}/student/profile`, { headers }).then(r => r.json());
+            const grades = await fetch(`${API_BASE_URL}/student/grades`, { headers }).then(r => r.json());
+
+            let html = `
+                <div class="data-card">
+                    <h3>My Profile</h3>
+                    <div class="row"><span class="label">Name:</span> <span class="value">${profile.name}</span></div>
+                    <div class="row"><span class="label">Email:</span> <span class="value">${profile.email}</span></div>
+                    <div class="row"><span class="label">CGPA:</span> <span class="value">${profile.cgpa}</span></div>
+                </div>
+                <h3>My Grades</h3>`;
+
+            html += grades.map(g => `
+                <div class="data-card">
+                    <div class="row"><span class="label">${g.subject}</span> <span class="value"><strong>${g.grade}</strong> (${g.score})</span></div>
+                </div>`).join('');
+
+            document.getElementById('student-content').innerHTML = html;
+        } catch (e) {
+            document.getElementById('student-content').innerHTML = "Error loading data.";
+        }
+    }
+
+    // --- UTILS ---
+    window.openTeacherTab = function(tabId) {
+        // Hide all panes
+        document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+        // Deactivate all buttons
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+        // Show selected
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+    };
+
+    window.logout = function() {
+        auth.signOut();
+        localStorage.clear();
+        location.reload();
+    };
+
+    function showError(msg) {
+        const errBox = document.getElementById('error-box');
+        errBox.innerText = msg;
+        errBox.style.display = 'block';
+        setTimeout(() => errBox.style.display = 'none', 4000);
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            firebaseToken = await user.getIdToken();
+            if (localStorage.getItem('userRole')) {
+                userRole = localStorage.getItem('userRole');
+                initDashboard();
+            } else {
+                checkUser();
+            }
+        }
+    });
+</script>
+</body>
+</html>
