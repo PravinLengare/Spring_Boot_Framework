@@ -3,8 +3,9 @@ package com.org.stem_project.config;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
-import com.org.stem_project.repository.StudentRepo;
-import com.org.stem_project.repository.TeacherRepo;
+import com.org.stem_project.model.User;
+import com.org.stem_project.repository.UserRepo;
+import com.org.stem_project.service.UserServiceImp;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,14 +22,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FirebaseTokenFilter extends OncePerRequestFilter {
-
     @Autowired
-    private StudentRepo studentRepo;
-    @Autowired
-    private TeacherRepo teacherRepo;
+    private UserServiceImp userServiceImp;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -53,15 +52,20 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
             System.out.println("Filter: Token Valid for email: " + email);
 
             List<GrantedAuthority> authorities = new ArrayList<>();
+            Optional<User> userOpt = userServiceImp.findByEmailT(email);
 
-            if (studentRepo.findByEmail(email).isPresent()) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
-            }
-            else if (teacherRepo.findByEmail(email).isPresent()) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_TEACHER"));
+            /**
+             * Here we are checking the user is present in the db or not
+             * if present then we are assigning the role as per the db
+             * else we treat them as user only
+             */
+
+            if (userOpt.isPresent()){
+                String role = userOpt.get().getRole();
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
             }
             else {
-                authorities.add(new SimpleGrantedAuthority("ROLE_NEW_USER"));
+                authorities.add(new SimpleGrantedAuthority("NEW_USER"));
             }
 
             // Authenticate

@@ -3,26 +3,31 @@ package com.org.stem_project.controller;
 import com.google.firebase.auth.FirebaseToken;
 import com.org.stem_project.model.Student;
 import com.org.stem_project.model.Teacher;
-import com.org.stem_project.service.StudentService;
-import com.org.stem_project.service.TeacherService;
+import com.org.stem_project.model.User;
+import com.org.stem_project.service.StudentServiceImp;
+import com.org.stem_project.service.TeacherServiceImp;
+import com.org.stem_project.service.UserServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    private StudentService studentService;
+    private StudentServiceImp studentServiceImp;
     @Autowired
-    private TeacherService teacherService;
+    private TeacherServiceImp teacherServiceImp;
+
+    @Autowired
+    private UserServiceImp userServiceImp;
 
 
     // DTO to receive role selection
@@ -36,14 +41,16 @@ public class AuthController {
         FirebaseToken token = (FirebaseToken) authentication.getCredentials();
         String email = token.getEmail();
 
-        if (studentService.findByEmailS(email).isPresent()) {
-            return ResponseEntity.ok(Map.of("status", "EXISTS", "role", "STUDENT"));
+        Optional<User> userOpt = userServiceImp.findByEmailT(email);
+        if (userOpt.isPresent()){
+            User user = userOpt.get();
+            if (!"NEW_USER".equals(user.getRole())){
+                return  ResponseEntity.ok(Map.of("status","EXISTS","role",user.getRole()));
+            }
+            return ResponseEntity.ok(Map.of("status","NEW_USER"));
         }
-        if (teacherService.findByEmailT(email).isPresent()) {
-            return ResponseEntity.ok(Map.of("status", "EXISTS", "role", "TEACHER"));
-        }
-
-        // User is new! Tell frontend to show buttons
+        User user = new User();
+        userServiceImp.add(user,token);
         return ResponseEntity.ok(Map.of("status", "NEW_USER"));
     }
 
@@ -51,23 +58,31 @@ public class AuthController {
     @PostMapping("/register-role")
     public ResponseEntity<?> registerRole(Authentication authentication, @RequestBody RoleRequest request) {
          FirebaseToken token = (FirebaseToken) authentication.getCredentials();
+         String email = token.getEmail();
+         User user = userServiceImp.findByEmailT(email).orElseThrow(()->
+                 new RuntimeException("User Not Found"));
 
         if ("STUDENT".equalsIgnoreCase(request.role)) {
-            Student s = new Student();
-            s.setEmail(token.getEmail());
-            s.setName(token.getName());
-            s.setFirebaseUid(token.getUid());
-            s.setCourse("Not assigned ");
-            studentService.add(s);
+            user.setRole("STUDENT");
+            userServiceImp.add(user);
+
+            Student student = new Student();
+            student.setUser(user);
+            student.setCourse("General");
+            student.setCgpa(9);
+            studentServiceImp.add(student);
             return ResponseEntity.ok(Map.of("message", "Student Registered"));
         }
         else if ("TEACHER".equalsIgnoreCase(request.role)) {
-            Teacher t = new Teacher();
-            t.setEmail(token.getEmail());
-            t.setName(token.getName());
-            t.setFirebaseUid(token.getUid());
-            t.setDepartment("General");
-            teacherService.add(t);
+
+            user.setRole("TEACHER");
+            userServiceImp.add(user);
+
+            Teacher teacher = new Teacher();
+            teacher.setUser(user);
+            teacher.setDepartment("IT");
+            teacher.setDesignation("Head");
+            teacherServiceImp.add(teacher);
             return ResponseEntity.ok(Map.of("message", "Teacher Registered"));
         }
 

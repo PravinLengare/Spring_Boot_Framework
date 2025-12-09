@@ -7,17 +7,17 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Teacher {
+@NoArgsConstructor
+@Table(name = "app_user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String department;
-    private String designation;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @Column(unique = true)
+    private String email;
+    private String name;
+    private String firebaseUid;
+    private String role; // "NEW_USER", "STUDENT", "TEACHER"
 }
