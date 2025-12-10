@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CategoryService implements CategoryI{
+public class CategoryServiceImp implements CategoryService {
 
     @Autowired
     private CategoryRepo categoryRepo;
