@@ -2,7 +2,6 @@ package com.org.stem_project.controller;
 
 import com.google.firebase.auth.FirebaseToken;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,7 @@ import java.util.Map;
 @RequestMapping("/api/student")
 public class StudentController {
 
-    @PreAuthorize("hasRole('STUDENT')")
+
     @GetMapping("/grades")
     public ResponseEntity<?> getMyGrades(){
         List<Map<String, Object>> grades = Arrays.asList(
@@ -28,7 +27,7 @@ public class StudentController {
         return ResponseEntity.ok(grades);
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(Authentication authentication) {
         FirebaseToken token = (FirebaseToken) authentication.getCredentials();
@@ -45,7 +44,7 @@ public class StudentController {
         return ResponseEntity.ok(profile);
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+
     @GetMapping("/attendance")
     public ResponseEntity<?> getMyAttendance() {
         List<Map<String, Object>> attendance = Arrays.asList(

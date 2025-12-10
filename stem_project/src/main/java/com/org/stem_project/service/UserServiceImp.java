@@ -22,7 +22,7 @@ public class UserServiceImp implements UserService{
         user.setEmail(token.getEmail());
         user.setName(token.getName());
         user.setFirebaseUid(token.getUid());
-        user.setRole("NEW_USER");
+        user.setRole("USER");
         return userRepo.save(user);
     }
     @Override

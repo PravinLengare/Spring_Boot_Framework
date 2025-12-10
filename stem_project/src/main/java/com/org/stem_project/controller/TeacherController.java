@@ -2,7 +2,6 @@ package com.org.stem_project.controller;
 
 import com.google.firebase.auth.FirebaseToken;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +15,6 @@ import java.util.Map;
 @RequestMapping("/api/teacher")
 public class TeacherController {
 
-    // Get teacher profile - Only TEACHER role can access
-    @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/profile")
     public ResponseEntity<?> getMyProfile(Authentication authentication) {
         FirebaseToken token = (FirebaseToken) authentication.getCredentials();
@@ -34,8 +31,7 @@ public class TeacherController {
         return ResponseEntity.ok(profile);
     }
 
-    // Get teacher's classes - Only TEACHER role can access
-    @PreAuthorize("hasRole('TEACHER')")
+
     @GetMapping("/classes")
     public ResponseEntity<?> getMyClasses(Authentication authentication) {
         List<Map<String, Object>> classes = Arrays.asList(
@@ -65,8 +61,7 @@ public class TeacherController {
         return ResponseEntity.ok(classes);
     }
 
-    // Get all students under this teacher - Only TEACHER role can access
-    @PreAuthorize("hasRole('TEACHER')")
+
     @GetMapping("/students")
     public ResponseEntity<?> getAllStudents() {
         List<Map<String, Object>> students = Arrays.asList(
@@ -103,8 +98,7 @@ public class TeacherController {
         return ResponseEntity.ok(students);
     }
 
-    // Get pending assignments to grade - Only TEACHER role can access
-    @PreAuthorize("hasRole('TEACHER')")
+
     @GetMapping("/pending-assignments")
     public ResponseEntity<?> getPendingAssignments() {
         List<Map<String, Object>> pendingAssignments = Arrays.asList(
@@ -129,8 +123,7 @@ public class TeacherController {
         return ResponseEntity.ok(pendingAssignments);
     }
 
-    // Get teacher statistics - Only TEACHER role can access
-    @PreAuthorize("hasRole('TEACHER')")
+
     @GetMapping("/statistics")
     public ResponseEntity<?> getStatistics() {
         Map<String, Object> stats = Map.of(

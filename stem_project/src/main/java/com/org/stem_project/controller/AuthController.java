@@ -1,17 +1,12 @@
 package com.org.stem_project.controller;
 
 import com.google.firebase.auth.FirebaseToken;
-import com.org.stem_project.model.Student;
-import com.org.stem_project.model.Teacher;
 import com.org.stem_project.model.User;
-import com.org.stem_project.service.StudentServiceImp;
-import com.org.stem_project.service.TeacherServiceImp;
-import com.org.stem_project.service.UserServiceImp;
+import com.org.stem_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,18 +16,14 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    private StudentServiceImp studentServiceImp;
-    @Autowired
-    private TeacherServiceImp teacherServiceImp;
 
     @Autowired
-    private UserServiceImp userServiceImp;
+    private UserService userService;
 
 
     // DTO to receive role selection
     public static class RoleRequest {
-        public String role; // "STUDENT" or "TEACHER"
+        public String role;
     }
 
     // 1. LOGIN CHECK: User logs in, we check if they exist
@@ -41,7 +32,7 @@ public class AuthController {
         FirebaseToken token = (FirebaseToken) authentication.getCredentials();
         String email = token.getEmail();
 
-        Optional<User> userOpt = userServiceImp.findByEmailT(email);
+        Optional<User> userOpt = userService.findByEmailT(email);
         if (userOpt.isPresent()){
             User user = userOpt.get();
             if (!"NEW_USER".equals(user.getRole())){
@@ -50,11 +41,12 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("status","NEW_USER"));
         }
         User user = new User();
-        userServiceImp.add(user,token);
+        userService.add(user,token);
         return ResponseEntity.ok(Map.of("status", "NEW_USER"));
     }
 
     // 2. REGISTER ROLE: User clicked a button
+    /*
     @PostMapping("/register-role")
     public ResponseEntity<?> registerRole(Authentication authentication, @RequestBody RoleRequest request) {
          FirebaseToken token = (FirebaseToken) authentication.getCredentials();
@@ -81,11 +73,13 @@ public class AuthController {
             Teacher teacher = new Teacher();
             teacher.setUser(user);
             teacher.setDepartment("IT");
-            teacher.setDesignation("Head");
+            teacher.setDepartment("Head");
             teacherServiceImp.add(teacher);
             return ResponseEntity.ok(Map.of("message", "Teacher Registered"));
         }
 
         return ResponseEntity.badRequest().body("Invalid Role");
     }
+
+     */
 }
