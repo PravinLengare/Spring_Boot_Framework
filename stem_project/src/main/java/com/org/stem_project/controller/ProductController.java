@@ -16,6 +16,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/get")
     public List<Product> getAllProducts(){
         return productService.getAllRecords();

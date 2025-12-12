@@ -1,6 +1,7 @@
 package com.org.stem_project.config;
 
 
+import com.org.stem_project.AuthFilter.FirebaseTokenFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,8 +28,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Keep disabled for REST APIs/testing
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register","/","/index.html",
-                               "/api/auth/**").permitAll()
-
+                               "/api/auth/**","/favicon.ico",
+                                "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->

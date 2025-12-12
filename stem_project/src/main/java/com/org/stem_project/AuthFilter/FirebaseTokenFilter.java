@@ -1,13 +1,13 @@
-package com.org.stem_project.config;
+package com.org.stem_project.AuthFilter;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import com.org.stem_project.model.User;
-import com.org.stem_project.repository.UserRepo;
-import com.org.stem_project.service.UserServiceImp;
+import com.org.stem_project.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,32 +27,42 @@ import java.util.Optional;
 @Component
 public class FirebaseTokenFilter extends OncePerRequestFilter {
     @Autowired
-    private UserServiceImp userServiceImp;
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+//
+//        String header = request.getHeader("Authorization");
+//        if (header == null || !header.startsWith("Bearer ")) {
+//            System.out.println("Filter: No Bearer Token found in header");
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
 
-        String header = request.getHeader("Authorization");
+        String token = null;
 
-        // DEBUG 1: Did we get a header?
-        if (header == null || !header.startsWith("Bearer ")) {
-            System.out.println("Filter: No Bearer Token found in header");
-            filterChain.doFilter(request, response);
+        if(request.getCookies() != null){
+            for(Cookie cookie : request.getCookies()){
+                if("session_token".equals(cookie.getName()))
+                      token =   cookie.getValue();
+                System.out.println("COOKIE "+cookie.getValue());
+            }
+        }
+
+        if (token == null){
+            filterChain.doFilter(request,response);
             return;
         }
 
-        String token = header.substring(7);
-
         try {
-            // DEBUG 2: Verifying...
             FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
             String email = decodedToken.getEmail();
 
             System.out.println("Filter: Token Valid for email: " + email);
 
             List<GrantedAuthority> authorities = new ArrayList<>();
-            Optional<User> userOpt = userServiceImp.findByEmailT(email);
+            Optional<User> userOpt = userService.findByEmailT(email);
 
             /**
              * Here we are checking the user is present in the db or not
