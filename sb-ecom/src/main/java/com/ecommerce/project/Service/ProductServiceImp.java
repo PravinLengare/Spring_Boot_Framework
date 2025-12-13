@@ -234,7 +234,6 @@ public class ProductServiceImp implements ProductService{
         Product productFound = productRepo.findById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
 
-
         String fileName = fileService.uploadImage(path,image);
 
         Product updatedProduct = productRepo.save(productFound);
