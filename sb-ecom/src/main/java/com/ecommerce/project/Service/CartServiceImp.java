@@ -146,7 +146,7 @@ public class CartServiceImp implements CartService{
             throw new APIException("The resulting quantity can not be negative !");
         }
         if (newQuantity == 0){
-            deleteItem(cartId,productId);
+            deleteProductFromCart(cartId,productId);
         }
         else {
 
@@ -178,7 +178,7 @@ public class CartServiceImp implements CartService{
 
     @Transactional
     @Override
-    public String deleteItem(Long cartId, Long productId) {
+    public String deleteProductFromCart(Long cartId, Long productId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(()->new ResourceNotFoundException("Cart","cartId",cartId));
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId,productId);
@@ -189,6 +189,23 @@ public class CartServiceImp implements CartService{
         cartItemRepository.deleteCartItemByProductIdAndCartId(cartId,productId);
         return "Product "+ cartItem.getProduct().getProductName() + "removed from the cart!";
     }
+
+    @Override
+    public void updateProductInCart(Long cartId, Long productId) {
+        Cart cart = cartRepository.findById(cartId)
+                .orElseThrow(()->new ResourceNotFoundException("Cart","cartId",cartId));
+        Product product = productRepo.findById(productId)
+                .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
+        CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId,productId);
+        if (cartItem == null){
+            throw new APIException("Product " + product.getProductName() + " not available in cart");
+        }
+        double cartPrice = cart.getTotalPrice() - (cartItem.getProductPrice() * cartItem.getQuantity());
+        cartItem.setProductPrice(product.getSpecialPrice());
+        cart.setTotalPrice(cartPrice + (cartItem.getProductPrice() * cartItem.getQuantity()));
+        cartItemRepository.save(cartItem);
+    }
+
 
     public Cart createCart(){
         Cart userCart = cartRepository.findCartByEmail(authUtil.loggedInEmail());
