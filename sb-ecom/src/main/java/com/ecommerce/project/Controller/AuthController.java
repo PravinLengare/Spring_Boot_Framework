@@ -1,7 +1,7 @@
 package com.ecommerce.project.Controller;
 
-import com.ecommerce.project.Repo.RoleRepository;
-import com.ecommerce.project.Repo.UserRepository;
+import com.ecommerce.project.Repository.RoleRepository;
+import com.ecommerce.project.Repository.UserRepository;
 import com.ecommerce.project.model.AppRoles;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.User;
@@ -22,7 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,4 +1,4 @@
-package com.ecommerce.project.Repo;
+package com.ecommerce.project.Repository;
 
 import com.ecommerce.project.model.CartItem;
 import jakarta.transaction.Transactional;

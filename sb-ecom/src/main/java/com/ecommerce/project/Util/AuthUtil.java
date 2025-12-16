@@ -1,6 +1,6 @@
 package com.ecommerce.project.Util;
 
-import com.ecommerce.project.Repo.UserRepository;
+import com.ecommerce.project.Repository.UserRepository;
 import com.ecommerce.project.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

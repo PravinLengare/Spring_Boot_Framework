@@ -1,8 +1,8 @@
 package com.ecommerce.project.Service;
 
-import com.ecommerce.project.Repo.CartItemRepository;
-import com.ecommerce.project.Repo.CartRepository;
-import com.ecommerce.project.Repo.ProductRepo;
+import com.ecommerce.project.Repository.CartItemRepository;
+import com.ecommerce.project.Repository.CartRepository;
+import com.ecommerce.project.Repository.ProductRepo;
 import com.ecommerce.project.Util.AuthUtil;
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;

@@ -1,7 +1,6 @@
-package com.ecommerce.project.Repo;
+package com.ecommerce.project.Repository;
 
 import com.ecommerce.project.model.Cart;
-import com.ecommerce.project.payload.CartDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

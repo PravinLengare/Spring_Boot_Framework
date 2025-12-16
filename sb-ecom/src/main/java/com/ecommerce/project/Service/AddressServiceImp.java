@@ -1,7 +1,7 @@
 package com.ecommerce.project.Service;
 
-import com.ecommerce.project.Repo.AddressRepository;
-import com.ecommerce.project.Repo.UserRepository;
+import com.ecommerce.project.Repository.AddressRepository;
+import com.ecommerce.project.Repository.UserRepository;
 import com.ecommerce.project.Util.AuthUtil;
 import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.Address;

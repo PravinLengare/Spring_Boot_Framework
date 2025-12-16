@@ -1,8 +1,8 @@
 package com.ecommerce.project.security.config;
 
 
-import com.ecommerce.project.Repo.RoleRepository;
-import com.ecommerce.project.Repo.UserRepository;
+import com.ecommerce.project.Repository.RoleRepository;
+import com.ecommerce.project.Repository.UserRepository;
 import com.ecommerce.project.model.Role;
 import com.ecommerce.project.model.User;
 import com.ecommerce.project.model.AppRoles;
