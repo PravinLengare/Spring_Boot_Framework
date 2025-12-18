@@ -31,7 +31,7 @@ public class OrderServiceImp implements OrderService{
     @Autowired
     private PaymentRepository paymentRepository;
     @Autowired
-    private ProductRepo productRepo;
+    private ProductRepository productRepository;
     @Autowired
     private CartService cartService;
     @Autowired
@@ -77,7 +77,7 @@ public class OrderServiceImp implements OrderService{
             int quantity = item.getQuantity();
             Product product = item.getProduct();
             product.setQuantity(product.getQuantity() - quantity);
-            productRepo.save(product);
+            productRepository.save(product);
             cartService.deleteProductFromCart(cart.getCartId(),product.getProductId());
 
         });

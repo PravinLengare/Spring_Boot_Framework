@@ -2,7 +2,7 @@ package com.ecommerce.project.Service;
 
 import com.ecommerce.project.Repository.CartItemRepository;
 import com.ecommerce.project.Repository.CartRepository;
-import com.ecommerce.project.Repository.ProductRepo;
+import com.ecommerce.project.Repository.ProductRepository;
 import com.ecommerce.project.Util.AuthUtil;
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
@@ -26,7 +26,7 @@ public class CartServiceImp implements CartService{
     @Autowired
     private AuthUtil authUtil;
     @Autowired
-    private ProductRepo productRepo;
+    private ProductRepository productRepository;
     @Autowired
     private CartItemRepository cartItemRepository;
     @Autowired
@@ -35,7 +35,7 @@ public class CartServiceImp implements CartService{
     @Override
     public CartDTO addProduct(Long productId, Integer quantity) {
         Cart cart = createCart();
-        Product product = productRepo.findById(productId)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
 
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cart.getCartId(),productId);
@@ -125,7 +125,7 @@ public class CartServiceImp implements CartService{
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart","cartId",cartId));
 
-        Product product = productRepo.findById(productId)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
         if (product.getQuantity() == 0){
             throw new APIException(product.getProductName()+" is not available");
@@ -194,7 +194,7 @@ public class CartServiceImp implements CartService{
     public void updateProductInCart(Long cartId, Long productId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(()->new ResourceNotFoundException("Cart","cartId",cartId));
-        Product product = productRepo.findById(productId)
+        Product product = productRepository.findById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId,productId);
         if (cartItem == null){

@@ -2,7 +2,7 @@ package com.ecommerce.project.Service;
 
 import com.ecommerce.project.Repository.CartRepository;
 import com.ecommerce.project.Repository.CategoryRepo;
-import com.ecommerce.project.Repository.ProductRepo;
+import com.ecommerce.project.Repository.ProductRepository;
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.NOCategoryCreated;
 import com.ecommerce.project.exception.ResourceNotFoundException;
@@ -34,7 +34,7 @@ public class ProductServiceImp implements ProductService{
     @Autowired
     private CartService cartService;
     @Autowired
-    private ProductRepo productRepo;
+    private ProductRepository productRepo;
     @Autowired
     private CategoryRepo categoryRepo;
     @Autowired

@@ -19,7 +19,8 @@ public class OrderController {
     @Autowired
     private AuthUtil authUtil;
     @PostMapping("/order/users/payments/{paymentMethod}")
-    public ResponseEntity<OrderDTO> orderProduct(@Valid  @PathVariable String paymentMethod, @RequestBody OrderRequestDTO orderRequestDTO){
+    public ResponseEntity<OrderDTO> orderProduct(@Valid  @PathVariable String paymentMethod,
+                                                 @RequestBody OrderRequestDTO orderRequestDTO){
         String emailId = authUtil.loggedInEmail();
         OrderDTO savedOrderDTO = orderService.placeOrder(
                 emailId,
