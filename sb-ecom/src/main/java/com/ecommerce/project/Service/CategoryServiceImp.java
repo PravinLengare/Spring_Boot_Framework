@@ -9,7 +9,6 @@ import com.ecommerce.project.payload.categoryDTO.CategoryDTO;
 import com.ecommerce.project.payload.categoryDTO.CategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +24,6 @@ public class CategoryServiceImp implements CategoryService {
 
     private final CategoryRepo categoryRepo;
     private final ModelMapper modelMapper;
-    private final Category category;
 
     @Override
     @Transactional(readOnly = true)
@@ -40,9 +37,6 @@ public class CategoryServiceImp implements CategoryService {
         Page<Category> categoryPage = categoryRepo.findAll(pageDetails);
         List<Category> categories = categoryPage.getContent();
 
-        if (categories.isEmpty()){
-            throw new NOCategoryCreated("Still No category is created !!");
-        }
         List<CategoryDTO> categoryDTOS = categories.stream()
                 .map(category -> modelMapper.map(category,CategoryDTO.class))
                 .toList();
@@ -87,16 +81,11 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     @Transactional
     public CategoryDTO updateCategory(CategoryDTO categoryDTO,Long categoryId) {
-        Category category = modelMapper.map(categoryDTO,Category.class);
-        Category optionalCategory = categoryRepo.findById(categoryId)
-                .orElseThrow(()-> new ResourceNotFoundException("category","categoryId",categoryId));;
-
-        category.setCategoryId(categoryId);
-        category.setCategoryName(category.getCategoryName());
-        optionalCategory = categoryRepo.save(category);
-        CategoryDTO savedCategoryDTO = modelMapper.map(optionalCategory,CategoryDTO.class);
-
-        return savedCategoryDTO;
+        Category existingCategory = categoryRepo.findById(categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException("category", "categoryId", categoryId));
+        existingCategory.setCategoryName(categoryDTO.getCategoryName());
+        Category updatedCategory = categoryRepo.save(existingCategory);
+        return modelMapper.map(updatedCategory, CategoryDTO.class);
 
     }
 
