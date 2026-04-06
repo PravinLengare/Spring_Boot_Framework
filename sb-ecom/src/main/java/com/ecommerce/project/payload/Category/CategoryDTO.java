@@ -1,4 +1,4 @@
-package com.ecommerce.project.payload.categoryDTO;
+package com.ecommerce.project.payload.Category;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

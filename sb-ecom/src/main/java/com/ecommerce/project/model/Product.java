@@ -1,7 +1,6 @@
 package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -34,6 +33,8 @@ public class Product {
     private double price;
     private double discount;
     private double specialPrice;
+
+    // Relationships //
 
     @ManyToOne
     @JoinColumn(name = "category_id")

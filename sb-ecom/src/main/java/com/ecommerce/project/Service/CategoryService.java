@@ -1,8 +1,8 @@
 package com.ecommerce.project.Service;
 
 
-import com.ecommerce.project.payload.categoryDTO.CategoryDTO;
-import com.ecommerce.project.payload.categoryDTO.CategoryResponse;
+import com.ecommerce.project.payload.Category.CategoryDTO;
+import com.ecommerce.project.payload.Category.CategoryResponse;
 import jakarta.validation.Valid;
 
 public interface CategoryService {

@@ -2,8 +2,8 @@ package com.ecommerce.project.Controller;
 
 import com.ecommerce.project.Service.CategoryService;
 import com.ecommerce.project.config.AppConstants;
-import com.ecommerce.project.payload.categoryDTO.CategoryDTO;
-import com.ecommerce.project.payload.categoryDTO.CategoryResponse;
+import com.ecommerce.project.payload.Category.CategoryDTO;
+import com.ecommerce.project.payload.Category.CategoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;

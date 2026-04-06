@@ -1,23 +1,23 @@
 package com.ecommerce.project.Service;
 
-import com.ecommerce.project.payload.ProductDTO;
-import com.ecommerce.project.payload.ProductResponse;
+import com.ecommerce.project.payload.Product.ProductDTO;
+import com.ecommerce.project.payload.Product.ProductResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 public interface ProductService {
-    ProductDTO saveProduct(Long categoryId, ProductDTO product);
+    ProductDTO addProduct(Long categoryId, ProductDTO product);
 
     ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    ProductResponse getProductById(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
+    ProductResponse getProductsByCategory(Long categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
-    ProductResponse getProductByKeyword(String s, Integer pageNumber, Integer pageSize, String sortBy, String keyword);
+    ProductResponse getProductsByKeyword(String s, Integer pageNumber, Integer pageSize, String sortBy, String keyword);
 
-    ProductDTO updateProducts(ProductDTO product, Long productId);
+    ProductDTO updateProduct(ProductDTO product, Long productId);
 
-    ProductDTO removeProducts(Long productId);
+    ProductDTO removeProduct(Long productId);
 
     ProductDTO updateImage(MultipartFile image, Long productId) throws IOException;
 }
