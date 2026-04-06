@@ -12,7 +12,7 @@ import com.ecommerce.project.security.response.MessageResponse;
 import com.ecommerce.project.security.services.JwtService;
 import com.ecommerce.project.security.services.UserDetailsImp;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -29,18 +29,14 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private RoleRepository roleRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @PostMapping("/signup")
     public ResponseEntity<?> addUser(@Valid  @RequestBody SignupRequest signupRequest){
@@ -131,15 +127,12 @@ public class AuthController {
     }
 
     @GetMapping("/username")
-    public String currentUserName(Authentication authentication){
-        try {
-            if (authentication != null) {
-                return authentication.getName();
-            }
-        }catch (RuntimeException e){
-            System.out.println(""+ e);
+    public ResponseEntity<String> currentUserName(Authentication authentication){
+        if (authentication != null) {
+            return ResponseEntity.ok(authentication.getName());
         }
-        return "";
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body("User not authenticated");
     }
 
 
