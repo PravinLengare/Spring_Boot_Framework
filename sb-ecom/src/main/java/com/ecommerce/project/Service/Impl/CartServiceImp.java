@@ -1,8 +1,9 @@
-package com.ecommerce.project.Service;
+package com.ecommerce.project.Service.Impl;
 
 import com.ecommerce.project.Repository.CartItemRepository;
 import com.ecommerce.project.Repository.CartRepository;
 import com.ecommerce.project.Repository.ProductRepository;
+import com.ecommerce.project.Service.CartService;
 import com.ecommerce.project.Util.AuthUtil;
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Service
-public class CartServiceImp implements CartService{
+public class CartServiceImp implements CartService {
     @Autowired
     private CartRepository cartRepository;
     @Autowired

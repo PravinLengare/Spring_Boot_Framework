@@ -1,8 +1,11 @@
-package com.ecommerce.project.Service;
+package com.ecommerce.project.Service.Impl;
 
 import com.ecommerce.project.Repository.CartRepository;
 import com.ecommerce.project.Repository.CategoryRepo;
 import com.ecommerce.project.Repository.ProductRepository;
+import com.ecommerce.project.Service.CartService;
+import com.ecommerce.project.Service.FileService;
+import com.ecommerce.project.Service.ProductService;
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.NOCategoryCreated;
 import com.ecommerce.project.exception.ResourceNotFoundException;
@@ -27,7 +30,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductServiceImp implements ProductService{
+public class ProductServiceImp implements ProductService {
 
     private final ModelMapper modelMapper;
     private final CartRepository cartRepository;

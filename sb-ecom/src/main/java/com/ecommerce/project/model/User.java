@@ -54,7 +54,7 @@ public class User {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE},orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL},orphanRemoval = true)
     private List<Address> addresses = new ArrayList<>();
 
     @ToString.Exclude
@@ -73,5 +73,11 @@ public class User {
 
     public User(Set<Role> roles) {
         this.roles = roles;
+    }
+
+
+    public void addAddress(Address address) {
+        this.addresses.add(address);
+        address.setUser(this);
     }
 }

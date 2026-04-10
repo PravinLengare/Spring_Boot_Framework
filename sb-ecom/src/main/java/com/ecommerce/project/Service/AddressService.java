@@ -1,16 +1,16 @@
 package com.ecommerce.project.Service;
 
 import com.ecommerce.project.model.User;
-import com.ecommerce.project.payload.AddressDTO;
+import com.ecommerce.project.payload.Address.AddressDTO;
 
 import java.util.List;
 
 public interface AddressService {
-    AddressDTO addAddresses(AddressDTO addressDTO, User user);
+    AddressDTO addAddress(AddressDTO addressDTO, User user);
 
     List<AddressDTO> getAllAddresses();
 
-    AddressDTO getAddressByAddId(Long addressId);
+    AddressDTO getAddressById(Long addressId);
 
     List<AddressDTO> getUserAddresses();
 

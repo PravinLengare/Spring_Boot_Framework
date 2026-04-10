@@ -1,6 +1,8 @@
-package com.ecommerce.project.Service;
+package com.ecommerce.project.Service.Impl;
 
 import com.ecommerce.project.Repository.*;
+import com.ecommerce.project.Service.CartService;
+import com.ecommerce.project.Service.OrderService;
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.*;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class OrderServiceImp implements OrderService{
+public class OrderServiceImp implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
