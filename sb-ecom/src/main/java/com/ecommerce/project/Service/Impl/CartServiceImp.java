@@ -12,29 +12,28 @@ import com.ecommerce.project.model.CartItem;
 import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.CartDTO;
 import com.ecommerce.project.payload.Product.ProductDTO;
-import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 @Service
+@RequiredArgsConstructor
 public class CartServiceImp implements CartService {
-    @Autowired
-    private CartRepository cartRepository;
-    @Autowired
-    private AuthUtil authUtil;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CartItemRepository cartItemRepository;
-    @Autowired
-    private ModelMapper modelMapper;
+
+    private final CartRepository cartRepository;
+    private final AuthUtil authUtil;
+    private final ProductRepository productRepository;
+    private final CartItemRepository cartItemRepository;
+    private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public CartDTO addProduct(Long productId, Integer quantity) {
+
         Cart cart = createCart();
         Product product = productRepository.findById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
@@ -79,7 +78,9 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CartDTO> getAllCart() {
+
         List<Cart> carts = cartRepository.findAll();
         if (carts.isEmpty()){
             throw new APIException("No cart exists");
@@ -102,7 +103,9 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CartDTO getUserCart(String emailId, Long cartId) {
+
         Cart cart = cartRepository.findCartByEmailAndCartId(emailId,cartId);
         if (cart == null){
             throw new ResourceNotFoundException("Cart","cartId",cartId);
@@ -113,6 +116,7 @@ public class CartServiceImp implements CartService {
         List<ProductDTO> products = cart.getCartItems().stream()
                 .map(p -> modelMapper.map(p.getProduct(),ProductDTO.class))
                 .toList();
+
         cartDTO.setProducts(products);
         return cartDTO;
     }
@@ -180,12 +184,16 @@ public class CartServiceImp implements CartService {
     @Transactional
     @Override
     public String deleteProductFromCart(Long cartId, Long productId) {
+
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(()->new ResourceNotFoundException("Cart","cartId",cartId));
+
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId,productId);
+
         if (cartItem == null){
             throw new ResourceNotFoundException("Product","productId",productId);
         }
+
         cart.setTotalPrice(cart.getTotalPrice() - (cartItem.getProductPrice() * (cartItem.getQuantity())));
         cartItemRepository.deleteCartItemByProductIdAndCartId(cartId,productId);
         return "Product "+ cartItem.getProduct().getProductName() + "removed from the cart!";
@@ -220,6 +228,5 @@ public class CartServiceImp implements CartService {
         return newCart;
 
     }
-
 
 }

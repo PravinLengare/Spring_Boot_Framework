@@ -1,4 +1,4 @@
-package com.ecommerce.project.payload;
+package com.ecommerce.project.payload.Orders;
 
 import com.ecommerce.project.payload.Product.ProductDTO;
 import lombok.AllArgsConstructor;
