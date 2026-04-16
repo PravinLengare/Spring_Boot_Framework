@@ -10,7 +10,7 @@ import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.CartItem;
 import com.ecommerce.project.model.Product;
-import com.ecommerce.project.payload.CartDTO;
+import com.ecommerce.project.payload.Cart.CartDTO;
 import com.ecommerce.project.payload.Product.ProductDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -200,11 +200,15 @@ public class CartServiceImp implements CartService {
     }
 
     @Override
+    @Transactional
     public void updateProductInCart(Long cartId, Long productId) {
+
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(()->new ResourceNotFoundException("Cart","cartId",cartId));
+
         Product product = productRepository.findById(productId)
                 .orElseThrow(()->new ResourceNotFoundException("Product","productId",productId));
+
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(cartId,productId);
         if (cartItem == null){
             throw new APIException("Product " + product.getProductName() + " not available in cart");

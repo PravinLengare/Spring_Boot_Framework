@@ -58,6 +58,7 @@ public class ProductServiceImp implements ProductService {
         Product product = modelMapper.map(productDTO, Product.class);
         product.setImage("default.png");
         product.setCategory(category);
+        product.setQuantity(productDTO.getQuantity());
 
         double specialPrice = product.getPrice() - ((product.getDiscount() / 100.0) * product.getPrice());
         product.setSpecialPrice(specialPrice);

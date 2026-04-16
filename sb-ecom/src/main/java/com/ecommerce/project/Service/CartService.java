@@ -1,6 +1,6 @@
 package com.ecommerce.project.Service;
 
-import com.ecommerce.project.payload.CartDTO;
+import com.ecommerce.project.payload.Cart.CartDTO;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
